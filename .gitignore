@@ -1,0 +1,7 @@
+# ignore everything
+*
+
+# except models and bitfiles
+!.gitignore
+*.slx
+*/bitfiles
