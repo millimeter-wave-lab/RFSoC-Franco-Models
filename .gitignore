@@ -1,7 +1,12 @@
 # ignore everything
-*
+#*
 
 # except models and bitfiles
-!.gitignore
-!*.slx
-!*.dtbo
+#!.gitignore
+#!*.slx
+#!/Tutorials/bitfiles/tutorial1.dtbo
+
+*/tutorial*
+*/slprj/*
+*.log
+*.Xil*
