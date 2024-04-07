@@ -351,7 +351,7 @@
 ?meta	rfdc	xps:rfdc	t228_clk_out	125
 ?meta	rfdc	xps:rfdc	t228_enable_pll	on
 ?meta	rfdc	xps:rfdc	t228_ref_clk	125
-?meta	rfdc	xps:rfdc	t228_axi_stream_clk	250
+?meta	rfdc	xps:rfdc	t228_axi_stream_clk	500
 ?meta	rfdc	xps:rfdc	t228_output_power	20
 ?meta	rfdc	xps:rfdc	t228_qt_dac0_enable	on
 ?meta	rfdc	xps:rfdc	t228_qt_dac0_analog_output	Real
@@ -409,9 +409,9 @@
 ?meta	rfdc	xps:rfdc	t228_dt_dac0_analog_output	Real
 ?meta	rfdc	xps:rfdc	t228_dt_dac0_inter_mode	1x
 ?meta	rfdc	xps:rfdc	t228_dt_dac0_sample_per_cycle	8
-?meta	rfdc	xps:rfdc	t228_dt_dac0_req_axis_clk	250
-?meta	rfdc	xps:rfdc	t228_dt_dac0_mixer_type	Coarse
-?meta	rfdc	xps:rfdc	t228_dt_dac0_mixer_mode	Real\_->\_Real
+?meta	rfdc	xps:rfdc	t228_dt_dac0_req_axis_clk	500
+?meta	rfdc	xps:rfdc	t228_dt_dac0_mixer_type	Fine
+?meta	rfdc	xps:rfdc	t228_dt_dac0_mixer_mode	I/Q\_->\_Real
 ?meta	rfdc	xps:rfdc	t228_dt_dac0_nco_freq	0
 ?meta	rfdc	xps:rfdc	t228_dt_dac0_nco_phase	0
 ?meta	rfdc	xps:rfdc	t228_dt_dac0_coarse_freq	0
@@ -421,9 +421,9 @@
 ?meta	rfdc	xps:rfdc	t228_dt_dac1_analog_output	Real
 ?meta	rfdc	xps:rfdc	t228_dt_dac1_inter_mode	1x
 ?meta	rfdc	xps:rfdc	t228_dt_dac1_sample_per_cycle	8
-?meta	rfdc	xps:rfdc	t228_dt_dac1_req_axis_clk	250
-?meta	rfdc	xps:rfdc	t228_dt_dac1_mixer_type	Coarse
-?meta	rfdc	xps:rfdc	t228_dt_dac1_mixer_mode	Real\_->\_Real
+?meta	rfdc	xps:rfdc	t228_dt_dac1_req_axis_clk	500
+?meta	rfdc	xps:rfdc	t228_dt_dac1_mixer_type	Fine
+?meta	rfdc	xps:rfdc	t228_dt_dac1_mixer_mode	I/Q\_->\_Real
 ?meta	rfdc	xps:rfdc	t228_dt_dac1_nco_freq	0
 ?meta	rfdc	xps:rfdc	t228_dt_dac1_nco_phase	0
 ?meta	rfdc	xps:rfdc	t228_dt_dac1_coarse_freq	0
@@ -435,7 +435,7 @@
 ?meta	rfdc	xps:rfdc	t229_clk_out	125
 ?meta	rfdc	xps:rfdc	t229_enable_pll	on
 ?meta	rfdc	xps:rfdc	t229_ref_clk	125
-?meta	rfdc	xps:rfdc	t229_axi_stream_clk	250
+?meta	rfdc	xps:rfdc	t229_axi_stream_clk	500
 ?meta	rfdc	xps:rfdc	t229_output_power	20
 ?meta	rfdc	xps:rfdc	t229_qt_dac0_enable	on
 ?meta	rfdc	xps:rfdc	t229_qt_dac0_analog_output	Real
@@ -493,9 +493,9 @@
 ?meta	rfdc	xps:rfdc	t229_dt_dac0_analog_output	Real
 ?meta	rfdc	xps:rfdc	t229_dt_dac0_inter_mode	1x
 ?meta	rfdc	xps:rfdc	t229_dt_dac0_sample_per_cycle	8
-?meta	rfdc	xps:rfdc	t229_dt_dac0_req_axis_clk	250
-?meta	rfdc	xps:rfdc	t229_dt_dac0_mixer_type	Coarse
-?meta	rfdc	xps:rfdc	t229_dt_dac0_mixer_mode	Real\_->\_Real
+?meta	rfdc	xps:rfdc	t229_dt_dac0_req_axis_clk	500
+?meta	rfdc	xps:rfdc	t229_dt_dac0_mixer_type	Fine
+?meta	rfdc	xps:rfdc	t229_dt_dac0_mixer_mode	I/Q\_->\_Real
 ?meta	rfdc	xps:rfdc	t229_dt_dac0_nco_freq	0
 ?meta	rfdc	xps:rfdc	t229_dt_dac0_nco_phase	0
 ?meta	rfdc	xps:rfdc	t229_dt_dac0_coarse_freq	0
@@ -505,9 +505,9 @@
 ?meta	rfdc	xps:rfdc	t229_dt_dac1_analog_output	Real
 ?meta	rfdc	xps:rfdc	t229_dt_dac1_inter_mode	1x
 ?meta	rfdc	xps:rfdc	t229_dt_dac1_sample_per_cycle	8
-?meta	rfdc	xps:rfdc	t229_dt_dac1_req_axis_clk	250
-?meta	rfdc	xps:rfdc	t229_dt_dac1_mixer_type	Coarse
-?meta	rfdc	xps:rfdc	t229_dt_dac1_mixer_mode	Real\_->\_Real
+?meta	rfdc	xps:rfdc	t229_dt_dac1_req_axis_clk	500
+?meta	rfdc	xps:rfdc	t229_dt_dac1_mixer_type	Fine
+?meta	rfdc	xps:rfdc	t229_dt_dac1_mixer_mode	I/Q\_->\_Real
 ?meta	rfdc	xps:rfdc	t229_dt_dac1_nco_freq	0
 ?meta	rfdc	xps:rfdc	t229_dt_dac1_nco_phase	0
 ?meta	rfdc	xps:rfdc	t229_dt_dac1_coarse_freq	0
@@ -519,7 +519,7 @@
 ?meta	rfdc	xps:rfdc	t230_clk_out	125
 ?meta	rfdc	xps:rfdc	t230_enable_pll	on
 ?meta	rfdc	xps:rfdc	t230_ref_clk	125
-?meta	rfdc	xps:rfdc	t230_axi_stream_clk	250
+?meta	rfdc	xps:rfdc	t230_axi_stream_clk	500
 ?meta	rfdc	xps:rfdc	t230_output_power	20
 ?meta	rfdc	xps:rfdc	t230_qt_dac0_enable	on
 ?meta	rfdc	xps:rfdc	t230_qt_dac0_analog_output	Real
@@ -577,9 +577,9 @@
 ?meta	rfdc	xps:rfdc	t230_dt_dac0_analog_output	Real
 ?meta	rfdc	xps:rfdc	t230_dt_dac0_inter_mode	1x
 ?meta	rfdc	xps:rfdc	t230_dt_dac0_sample_per_cycle	8
-?meta	rfdc	xps:rfdc	t230_dt_dac0_req_axis_clk	250
-?meta	rfdc	xps:rfdc	t230_dt_dac0_mixer_type	Coarse
-?meta	rfdc	xps:rfdc	t230_dt_dac0_mixer_mode	Real\_->\_Real
+?meta	rfdc	xps:rfdc	t230_dt_dac0_req_axis_clk	500
+?meta	rfdc	xps:rfdc	t230_dt_dac0_mixer_type	Fine
+?meta	rfdc	xps:rfdc	t230_dt_dac0_mixer_mode	I/Q\_->\_Real
 ?meta	rfdc	xps:rfdc	t230_dt_dac0_nco_freq	0
 ?meta	rfdc	xps:rfdc	t230_dt_dac0_nco_phase	0
 ?meta	rfdc	xps:rfdc	t230_dt_dac0_coarse_freq	0
@@ -589,9 +589,9 @@
 ?meta	rfdc	xps:rfdc	t230_dt_dac1_analog_output	Real
 ?meta	rfdc	xps:rfdc	t230_dt_dac1_inter_mode	1x
 ?meta	rfdc	xps:rfdc	t230_dt_dac1_sample_per_cycle	8
-?meta	rfdc	xps:rfdc	t230_dt_dac1_req_axis_clk	250
-?meta	rfdc	xps:rfdc	t230_dt_dac1_mixer_type	Coarse
-?meta	rfdc	xps:rfdc	t230_dt_dac1_mixer_mode	Real\_->\_Real
+?meta	rfdc	xps:rfdc	t230_dt_dac1_req_axis_clk	500
+?meta	rfdc	xps:rfdc	t230_dt_dac1_mixer_type	Fine
+?meta	rfdc	xps:rfdc	t230_dt_dac1_mixer_mode	I/Q\_->\_Real
 ?meta	rfdc	xps:rfdc	t230_dt_dac1_nco_freq	0
 ?meta	rfdc	xps:rfdc	t230_dt_dac1_nco_phase	0
 ?meta	rfdc	xps:rfdc	t230_dt_dac1_coarse_freq	0
@@ -603,7 +603,7 @@
 ?meta	rfdc	xps:rfdc	t231_clk_out	125
 ?meta	rfdc	xps:rfdc	t231_enable_pll	on
 ?meta	rfdc	xps:rfdc	t231_ref_clk	125
-?meta	rfdc	xps:rfdc	t231_axi_stream_clk	250
+?meta	rfdc	xps:rfdc	t231_axi_stream_clk	500
 ?meta	rfdc	xps:rfdc	t231_output_power	20
 ?meta	rfdc	xps:rfdc	t231_qt_dac0_enable	on
 ?meta	rfdc	xps:rfdc	t231_qt_dac0_analog_output	Real
@@ -661,9 +661,9 @@
 ?meta	rfdc	xps:rfdc	t231_dt_dac0_analog_output	Real
 ?meta	rfdc	xps:rfdc	t231_dt_dac0_inter_mode	1x
 ?meta	rfdc	xps:rfdc	t231_dt_dac0_sample_per_cycle	8
-?meta	rfdc	xps:rfdc	t231_dt_dac0_req_axis_clk	250
-?meta	rfdc	xps:rfdc	t231_dt_dac0_mixer_type	Coarse
-?meta	rfdc	xps:rfdc	t231_dt_dac0_mixer_mode	Real\_->\_Real
+?meta	rfdc	xps:rfdc	t231_dt_dac0_req_axis_clk	500
+?meta	rfdc	xps:rfdc	t231_dt_dac0_mixer_type	Fine
+?meta	rfdc	xps:rfdc	t231_dt_dac0_mixer_mode	I/Q\_->\_Real
 ?meta	rfdc	xps:rfdc	t231_dt_dac0_nco_freq	0
 ?meta	rfdc	xps:rfdc	t231_dt_dac0_nco_phase	0
 ?meta	rfdc	xps:rfdc	t231_dt_dac0_coarse_freq	0
@@ -673,9 +673,9 @@
 ?meta	rfdc	xps:rfdc	t231_dt_dac1_analog_output	Real
 ?meta	rfdc	xps:rfdc	t231_dt_dac1_inter_mode	1x
 ?meta	rfdc	xps:rfdc	t231_dt_dac1_sample_per_cycle	8
-?meta	rfdc	xps:rfdc	t231_dt_dac1_req_axis_clk	250
-?meta	rfdc	xps:rfdc	t231_dt_dac1_mixer_type	Coarse
-?meta	rfdc	xps:rfdc	t231_dt_dac1_mixer_mode	Real\_->\_Real
+?meta	rfdc	xps:rfdc	t231_dt_dac1_req_axis_clk	500
+?meta	rfdc	xps:rfdc	t231_dt_dac1_mixer_type	Fine
+?meta	rfdc	xps:rfdc	t231_dt_dac1_mixer_mode	I/Q\_->\_Real
 ?meta	rfdc	xps:rfdc	t231_dt_dac1_nco_freq	0
 ?meta	rfdc	xps:rfdc	t231_dt_dac1_nco_phase	0
 ?meta	rfdc	xps:rfdc	t231_dt_dac1_coarse_freq	0
@@ -760,14 +760,13 @@
 ?meta	snapshot	casper:snapshot	use_dsp48	off
 ?meta	77777	77777	tags	casper:snapshot,xps:bram,xps:rfdc,xps:sw_reg,xps:xsg
 ?meta	77777	77777	system	tutorial2
-?meta	77777	77777	builddate	05-Apr-2024\_12:41:50
-?meta	77777	77777	xlSgRoot	/tools/Xilinx/Vivado/2021.1/lib/lnx64.o/matlab/sysgen.mexa64
+?meta	77777	77777	builddate	07-Apr-2024\_16:48:14
 ?meta	77777_git rcs python2\_not\_found
-?meta	77777	77777	md5_header	0e8bede8e5f0b287529eb4f236bbc4f3
+?meta	77777	77777	md5_header	ea144ab7c998417fb41f385c4afc16db
 ?meta	77777	77777	md5_bitstream	21c7aa882932a255569ff669bd508cb2
 ?meta	77777	77777	flash_write_checksum	54996_1988
 ?quit
-‹óf system.bin ì`Uÿ3™„I¼õNJ
+‹¼f system.bin ì`Uÿ3™„I¼õNJ
 EŠœ^DÜÕ@ä¡¨=	‚Ö5È_—À*»«°ÈCƒ®,§¡jèÂ]Ê®K, µîºŠv5<Td+¨ë£º]P¬yÈıŸß9gæÎÜ;·IÛ¤mr¿Ÿ6sÏœ×ùÍ¹¿ó;gÎ£\Ş1ˆèöõÇçë×-´'ÿuûÂ#óIö“”ù÷I\ŠãÛOOxGÑ²ÿéö&=’|®¼`ıàG\ºV›f’İ^7MèOÏsçÔİDÉ÷lí/ùN›§gı$^öÖ£                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              €C”Jüá×¤\S»)ãN>Œã°Ú?L¹¦vçd0E>LÔŞÎ^µ¿—rMíÎÉ`Š|          ÀîÔıDEì£?ôa9ûs Ç§ÚÑGòÈ'?lç8j·”$g#­ªJ[zûCÿCÔñ!sáé|eHÊÜŠ!tƒü_é»Z%8,|™Î*é°
 »AE)§ÆÆñ]€ëø
 ¬»·F”t×ØŞfanˆøÎ¢š®²VmÄ~b%µk—2¾ít‚'8öÒ—éK–ú›T_«¾Dj'er|)}Ål'¤ıçægßKÔòo+ÉıHôMıHÉóµ¿¾yŸô½ë|B–G.u2[İã	S‚®ê¶Õ)¬,Cê³2·×£³1n'ÿˆ¿7Ò—¹ëµ[_0‚Ö×ñu

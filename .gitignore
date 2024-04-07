@@ -3,5 +3,5 @@
 
 # except models and bitfiles
 !.gitignore
-*.slx
-*/bitfiles
+!*.slx
+!*.dtbo
