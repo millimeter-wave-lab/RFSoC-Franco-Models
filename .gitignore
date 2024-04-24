@@ -11,3 +11,4 @@
 *.log
 *.Xil*
 *.autosave
+*.pyc
