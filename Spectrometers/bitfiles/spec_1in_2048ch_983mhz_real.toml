@@ -1,10 +1,11 @@
 IP        = "10.42.0.157"
 bitfile   = "spec_1in_2048ch_983mhz_real.fpg"
-adc_bits  = 14
+adc_bits  = 16
+program   = false
 
 [snapshots]
 snap_names = ["adc_snapshot"]
-n_samples = 256
+n_samples  = 256
 
 [spectra]
 bram_names = [["spec0", "spec1", "spec2", "spec3"]]

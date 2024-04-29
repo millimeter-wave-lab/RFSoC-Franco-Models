@@ -3,15 +3,14 @@ import casperfpga
 import numpy as np
 
 def initialize_rfsoc(config):
-    # program rfsoc
     rfsoc = casperfpga.CasperFpga(config["IP"])
-    rfsoc.upload_to_ram_and_program(config["bitfile"])
 
-    # check rfdc status
-    rfdc = rfsoc.adcs['rfdc']
-    rfdc.init()
-    print("RFDC Status:")
-    rfdc.status()
+    if config["program"]:
+        rfsoc.upload_to_ram_and_program(config["bitfile"])
+        rfdc = rfsoc.adcs['rfdc']
+        rfdc.init()
+        print("RFDC Status:")
+        rfdc.status()
 
     return rfsoc
 
