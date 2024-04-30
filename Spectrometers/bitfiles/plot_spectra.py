@@ -28,7 +28,8 @@ def main():
     dtype   = ">u" + str(data_width//8)
     n_bins  = 2**addr_width * n_brams 
     freqs   = np.linspace(0, bandwidth, n_bins, endpoint=False)
-    dBFS    = 6.02*adc_bits + 1.76 + 10*np.log10(n_bins)
+    #dBFS    = 6.02*adc_bits + 1.76 + 10*np.log10(n_bins)
+    dBFS    = 90
 
     # initialize rfsoc
     rfsoc = cd.initialize_rfsoc(config)

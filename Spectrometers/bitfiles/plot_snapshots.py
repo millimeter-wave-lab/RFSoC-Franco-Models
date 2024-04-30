@@ -49,7 +49,7 @@ def create_figure(snapshots, n_samples, adc_bits):
     lines = []
     for snapshot, ax in zip(snapshots, axes.flatten()):
         ax.set_xlim(0, n_samples)
-        ax.set_ylim(-2**adc_bits, 2**adc_bits)
+        ax.set_ylim(-2**(adc_bits-1), 2**(adc_bits-1))
         ax.set_xlabel("Samples")
         ax.set_ylabel("Amplitude")
         ax.set_title(snapshot)
