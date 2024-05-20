@@ -4,14 +4,13 @@ import numpy as np
 
 def initialize_rfsoc(config):
     rfsoc = casperfpga.CasperFpga(config["IP"])
-
-    if config["program"]:
+    # program rfsoc if in config or it has no program
+    if config["program"] or not rfsoc.is_running():
         rfsoc.upload_to_ram_and_program(config["bitfile"])
         rfdc = rfsoc.adcs['rfdc']
         rfdc.init()
         print("RFDC Status:")
         rfdc.status()
-
     return rfsoc
 
 def read_snapshots(rfsoc, snapnames):
@@ -29,7 +28,6 @@ def read_snapshots(rfsoc, snapnames):
         data = np.frombuffer(data_bytes, np.int16)
         # add to list of data
         data_list.append(data)
-
     return data_list
     
 def read_data(rfsoc, bram, awidth, dwidth, dtype):
@@ -46,7 +44,6 @@ def read_data(rfsoc, bram, awidth, dwidth, dtype):
     rawdata  = rfsoc.read(bram, depth*dwidth/8, 0)
     bramdata = np.frombuffer(rawdata, dtype=dtype)
     bramdata = bramdata.astype(float)
-
     return bramdata
 
 def read_interleave_data(roach, brams, awidth, dwidth, dtype):
@@ -61,10 +58,8 @@ def read_interleave_data(roach, brams, awidth, dwidth, dtype):
     """
     # get data
     bramdata_list = [read_data(roach, bram, awidth, dwidth, dtype) for bram in brams]
-
     # interleave data list into a single array (this works, believe me)
     interleaved_data = np.vstack(bramdata_list).reshape((-1,), order='F')
-
     return interleaved_data
 
 def scale_and_dBFS_specdata(data, acclen, dBFS):
@@ -81,8 +76,6 @@ def scale_and_dBFS_specdata(data, acclen, dBFS):
     """
     # scale data
     data = data / acclen
-
     # convert data to dBFS
     data = 10*np.log10(data+1) - dBFS
-
     return data
