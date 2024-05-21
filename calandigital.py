@@ -1,6 +1,6 @@
 # imports
-import casperfpga
 import numpy as np
+import casperfpga
 
 def initialize_rfsoc(config):
     rfsoc = casperfpga.CasperFpga(config["IP"])
@@ -46,10 +46,10 @@ def read_data(rfsoc, bram, awidth, dwidth, dtype):
     bramdata = bramdata.astype(float)
     return bramdata
 
-def read_interleave_data(roach, brams, awidth, dwidth, dtype):
+def read_interleave_data(rfsoc, brams, awidth, dwidth, dtype):
     """
     Reads data from a list of brams and interleave the data.
-    :param roach: CalanFpga object to communicate with ROACH.
+    :param rfoc: CalanFpga object to communicate with RFSoC.
     :param brams: list of brams to read and interleave.
     :param awidth: width of bram address in bits.
     :param dwidth: width of bram data in bits.
@@ -57,7 +57,7 @@ def read_interleave_data(roach, brams, awidth, dwidth, dtype):
     :return: array with the read data.
     """
     # get data
-    bramdata_list = [read_data(roach, bram, awidth, dwidth, dtype) for bram in brams]
+    bramdata_list = [read_data(rfsoc, bram, awidth, dwidth, dtype) for bram in brams]
     # interleave data list into a single array (this works, believe me)
     interleaved_data = np.vstack(bramdata_list).reshape((-1,), order='F')
     return interleaved_data

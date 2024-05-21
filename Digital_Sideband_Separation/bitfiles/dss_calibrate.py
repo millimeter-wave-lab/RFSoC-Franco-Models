@@ -6,54 +6,29 @@
 # calibration constants with an srr computation script.
 
 # imports
-import os, time, datetime, tarfile, shutil, json, pyvisa
+import os, time, json
 import numpy as np
 import matplotlib.pyplot as plt
-import ../../calandigital as cd
+
+import sys
+sys.path.append("../..")
+import calandigital as cd
+import dss_commons as dss
 
 def main():
     start_time = time.time()
     make_pre_measurements_actions()
     make_dss_measurements()
     make_post_measurements_actions()
-    print("Finished. Total time: " + str(int(time.time() - start_time)) + "[s]")
+    print("Finished. Total time:", int(time.time()-start_time), "[s]")
 
 def make_pre_measurements_actions():
     """
     Makes all the actions in preparation for the measurements:
     - initizalize RFSoC and generator communications.
     - creating plotting and data saving elements
-    - setting initial registers in FPGA
-    - turning on generator power
     """
-    global config, rfsoc, rm, rf_generator, fig, lines
-
-    # get configuration parameters
-    with open("dss_2in_2048ch_983_real.toml", "rb") as f:
-        config = tomli.load(f)
-    rfsoc = cd.initialize_rfsoc(config)
-
-    # extract configuration data
-    spec_brams = config["spectra"]["bram_names"]
-    addr_width = config["spectra"]["addr_width"] 
-    bandwidth  = config["spectra"]["bandwidth"]
-    reset_reg  = config["spectra"]["reset_reg"]
-    acc_reg    = config["spectra"]["acc_reg"]
-    acc_len    = config["spectra"]["acc_len"]
-    lo_freq    = config["experiment"]["lo_freq"]
-    bin_step   = config["experiment"]["bin_step"]
-    
-    # compute useful parameters
-    n_bins        = 2**addr_width * len(spec_brams[0])
-    if_freqs      = np.linspace(0, bandwidth, n_bins, endpoint=False) # MHz
-    test_bins     = range(1, n_bins, chnl_step)
-    if_test_freqs = if_freqs[test_bins] # MHz
-    rf_freqs_usb  = lo_freq + (if_freqs/1e3) # GHz
-    rf_freqs_lsb  = lo_freq - (if_freqs/1e3) # GHz
-
-    # create RF generator
-    rm = pyvisa.ResourceManager("@py")
-    rf_generator = rm.open_resource(rf_generator_name)
+    global fig, lines
 
     # create plot and data folder
     print("Setting up plotting and data saving elements...", end="")
@@ -61,20 +36,8 @@ def make_pre_measurements_actions():
     make_data_directory()
     print("done")
 
-    # set accumulation and reset counters
-    print("Setting accumulation register to " + str(acc_len) + "...", end="")
-    rfsoc.write_int(acc_reg, acc_len)
-    print("done")
-    print("Resseting counter registers...", end="")
-    rfsoc.write_int(reset_reg, 1)
-    rfsoc.write_int(reset_reg, 0)
-    print("done")
-    
-    # set rf power value
-    print("Setting instruments power and outputs...", end="")
-    rf_generator.write("power " + str(rf_power))
-    rf_generator.write("outp on")
-    print("done")
+    # rfsoc initialization
+    dss.rfsoc_initialization()
 
 def make_dss_measurements():
     """
@@ -82,16 +45,16 @@ def make_dss_measurements():
     """
     print("Starting tone sweep in upper sideband...", end="")
     sweep_time = time.time()
-    a2_toneusb, b2_toneusb, ab_toneusb = get_caldata(rf_freqs_usb, "usb")
-    print("done (" +str(int(time.time() - sweep_time)) + "[s])")
+    a2_toneusb, b2_toneusb, ab_toneusb = get_caldata(dss.rf_freqs_usb, "usb")
+    print("done", int(time.time() - sweep_time), "[s]")
         
     print("Starting tone sweep in lower sideband...", end="")
     sweep_time = time.time()
-    a2_tonelsb, b2_tonelsb, ab_tonelsb = get_caldata(rf_freqs_lsb, "lsb")
-    print("done (" +str(int(time.time() - sweep_time)) + "[s])")
+    a2_tonelsb, b2_tonelsb, ab_tonelsb = get_caldata(dss.rf_freqs_lsb, "lsb")
+    print("done", int(time.time()-sweep_time), "[s])")
 
     print("Saving data...", end="")
-    np.savez(cal_datadir+"/caldata", 
+    np.savez(dss.cal_datadir+"/caldata", 
         a2_toneusb=a2_toneusb, b2_toneusb=b2_toneusb, ab_toneusb=ab_toneusb,
         a2_tonelsb=a2_tonelsb, b2_tonelsb=b2_tonelsb, ab_tonelsb=ab_tonelsb)
     print("done")
@@ -107,19 +70,18 @@ def make_post_measurements_actions():
     - compress data
     """
     print("Turning off instruments...")
-    rf_generator.write("outp off")
-    rm.close()
+    dss.rf_generator.write("outp off")
+    dss.rm.close()
     print("done")
 
     print("Compressing data...")
-    compress_data(cal_datadir)
+    compress_data(dss.cal_datadir)
     print("done")
 
 def create_figure():
     """
     Creates figure for plotting.
     """
-    bandwidth = config["spectra"]["bandwidth"]
     fig, [[ax0, ax1], [ax2, ax3]] = plt.subplots(2,2)
     fig.set_tight_layout(True)
     fig.show()
@@ -133,7 +95,7 @@ def create_figure():
     lines  = [line0, line1, line2, line3] 
     
     # set spectrometers axes
-    ax0.set_xlim((0, bandwidth))     ; ax1.set_xlim((0, bandwidth))
+    ax0.set_xlim((0, dss.bandwidth)) ; ax1.set_xlim((0, dss.bandwidth))
     ax0.set_ylim((-85, 5))           ; ax1.set_ylim((-85, 5))
     ax0.grid()                       ; ax1.grid()
     ax0.set_xlabel("Frequency [MHz]"); ax1.set_xlabel("Frequency [MHz]")
@@ -141,14 +103,14 @@ def create_figure():
     ax0.set_title("Spec0")           ; ax1.set_title("Spec1")
 
     # set magnitude diference axis
-    ax2.set_xlim((0, bandwidth))
+    ax2.set_xlim((0, dss.bandwidth))
     ax2.set_ylim((0, 2))     
     ax2.grid()                 
     ax2.set_xlabel("Frequency [MHz]")
     ax2.set_ylabel("Mag ratio [lineal]")     
 
     # set magnitude diference axis
-    ax3.set_xlim((0, bandwidth))
+    ax3.set_xlim((0, dss.bandwidth))
     ax3.set_ylim((-200, 200))     
     ax3.grid()                 
     ax3.set_xlabel("Frequency [MHz]")
@@ -160,28 +122,13 @@ def make_data_directory():
     """
     Make directory where to save all the calibration data.
     """
-    os.mkdir(cal_datadir)
-    datetime_now = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-    # make .json file with test info
-    testinfo = {}
-    testinfo["IP"]           = config["IP"]
-    testinfo["datetime"]     = datetime_now
-    testinfo["bitfile"]      = config["bitfile"]
-    testinfo["bandwidth"]    = config["spectra"]["bandwidth"]
-    testinfo["nbins"]        = #TODO
-    testinfo["acc_len"]      = config["spectra"]["acc_len"]
-    testinfo["bin_step"]     = config["experiment"]["bin_step"]
-    testinfo["lo_freq"]      = config["experiment"]["lo_freq"]
-    testinfo["rf_generator"] = config["experiment"]["rf_generator"]
-    testinfo["rf power"]     = config["experiment"]["rf_power"]
-
-    with open(cal_datadir + "/testinfo.json", "w") as f:
-        json.dump(testinfo, f, indent=4, sort_keys=True)
+    os.mkdir(dss.cal_datadir)
+    with open(dss.cal_datadir + "/testinfo.json", "w") as f:
+        json.dump(dss.testinfo, f, indent=4, sort_keys=True)
 
     # make rawdata folders
-    os.mkdir(cal_datadir + "/rawdata_tone_usb")
-    os.mkdir(cal_datadir + "/rawdata_tone_lsb")
+    os.mkdir(dss.cal_datadir + "/rawdata_tone_usb")
+    os.mkdir(dss.cal_datadir + "/rawdata_tone_lsb")
 
 def get_caldata(rf_freqs, tone_sideband):
     """
@@ -197,21 +144,19 @@ def get_caldata(rf_freqs, tone_sideband):
     fig.canvas.set_window_title(tone_sideband.upper() + " Tone Sweep")
 
     a2_arr = []; b2_arr = []; ab_arr = []
-    for i, chnl in enumerate(test_channels):
+    pow_dtype    = ">u" + str(dss.data_width//8)
+    corr_dtype   = ">i" + str(dss.data_width//8)
+    for i, test_bin in enumerate(dss.test_bins):
         # set test tone
-        freq = rf_freqs[chnl]
+        freq = rf_freqs[test_bin]
         rf_generator.ask("freq " + str(freq) + " ghz; *opc?")
-        time.sleep(pause_time)
+        time.sleep(dss.pause_time)
 
         # read data
-        a2    = cd.read_interleave_data(roach, bram_a2,    bram_addr_width, 
-                                        bram_word_width,   pow_data_type)
-        b2    = cd.read_interleave_data(roach, bram_b2,    bram_addr_width, 
-                                        bram_word_width,   pow_data_type)
-        ab_re = cd.read_interleave_data(roach, bram_ab_re, bram_addr_width, 
-                                        bram_word_width,   crosspow_data_type)
-        ab_im = cd.read_interleave_data(roach, bram_ab_im, bram_addr_width, 
-                                        bram_word_width,   crosspow_data_type)
+        a2    = cd.read_interleave_data(rfsoc, bram_a2,    dss.addr_width, dss.data_width, pow_dtype)
+        b2    = cd.read_interleave_data(rfsoc, bram_b2,    dss.addr_width, dss.data_width, pow_dtype)
+        ab_re = cd.read_interleave_data(rfsoc, bram_ab_re, dss.addr_width, dss.data_width, corr_dtype)
+        ab_im = cd.read_interleave_data(rfsoc, bram_ab_im, dss.addr_width, dss.data_width, corr_dtype)
 
         # append data to arrays
         a2_arr.append(a2[chnl])
@@ -219,8 +164,8 @@ def get_caldata(rf_freqs, tone_sideband):
         ab_arr.append(ab_re[chnl] + 1j*ab_im[chnl])
 
         # scale and dBFS data for plotting
-        a2_plot = cd.scale_and_dBFS_specdata(a2, acc_len, dBFS)
-        b2_plot = cd.scale_and_dBFS_specdata(b2, acc_len, dBFS)
+        a2_plot = cd.scale_and_dBFS_specdata(a2, acc_len, dss.dBFS)
+        b2_plot = cd.scale_and_dBFS_specdata(b2, acc_len, dss.dBFS)
 
         # compute input ratios for plotting
         ab_ratios = np.divide(ab_arr, b2_arr)
@@ -234,8 +179,8 @@ def get_caldata(rf_freqs, tone_sideband):
         fig.canvas.flush_events()
         
         # save data
-        np.savez(cal_datadir+"/rawdata_tone_" + tone_sideband + "/chnl_" + 
-        str(chnl), a2=a2, b2=b2, ab_re=ab_re, ab_im=ab_im)
+        np.savez(dss.cal_datadir+"/rawdata_tone_" + tone_sideband + "/chnl_" + 
+            str(chnl), a2=a2, b2=b2, ab_re=ab_re, ab_im=ab_im)
 
     # compute interpolations
     a2_arr = np.interp(if_freqs, if_test_freqs, a2_arr)
@@ -249,7 +194,7 @@ def print_data():
     Print the saved data to .pdf images for an easy check.
     """
     # get data
-    caldata = np.load(cal_datadir + "/caldata.npz")
+    caldata = np.load(dss.cal_datadir + "/caldata.npz")
     a2_toneusb = caldata["a2_toneusb"]; a2_tonelsb = caldata["a2_tonelsb"]
     b2_toneusb = caldata["b2_toneusb"]; b2_tonelsb = caldata["b2_tonelsb"]
     ab_toneusb = caldata["ab_toneusb"]; ab_tonelsb = caldata["ab_tonelsb"]
@@ -265,7 +210,7 @@ def print_data():
     plt.grid()                 
     plt.xlabel("Frequency [GHz]")
     plt.ylabel("Mag ratio [lineal]")     
-    plt.savefig(cal_datadir+"/mag_ratios.pdf")
+    plt.savefig(dss.cal_datadir+"/mag_ratios.pdf")
     
     # print angle difference
     plt.figure()
@@ -274,19 +219,6 @@ def print_data():
     plt.grid()                 
     plt.xlabel("Frequency [GHz]")
     plt.ylabel("Angle diff [degrees]")     
-    plt.savefig(cal_datadir+"/angle_diff.pdf")
-
-def compress_data(datadir):
-    """
-    Compress the data from the datadir directory into a .tar.gz
-    file and delete the original directory.
-    :param datair: directory to compress.
-    """
-    tar = tarfile.open(datadir + ".tar.gz", "w:gz")
-    for datafile in os.listdir(datadir):
-        tar.add(datadir + "/" + datafile, datafile)
-    tar.close()
-    shutil.rmtree(datadir)
-
+    plt.savefig(dss.cal_datadir+"/angle_diff.pdf")
 if __name__ == "__main__":
     main()
