@@ -1,4 +1,4 @@
-IP        = "10.42.0.157"
+IP        = "10.42.0.223"
 bitfile   = "spec_1in_2048ch_983mhz_real.fpg"
 adc_bits  = 16
 program   = false
@@ -12,6 +12,7 @@ bram_names = [["spec0", "spec1", "spec2", "spec3"]]
 addr_width = 9
 data_width = 64
 bandwidth  = 983.04 # MHz
+dBFS       = 96
 reset_reg  = "cnt_rst"
 acc_reg    = "acc_len"
 acc_len    = 65536

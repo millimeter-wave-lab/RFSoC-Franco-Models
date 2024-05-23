@@ -1,4 +1,4 @@
-IP        = "10.42.0.157"
+IP        = "10.42.0.223"
 bitfile   = "dss_2in_2048ch_983mhz_real.fpg"
 adc_bits  = 16
 program   = false
@@ -36,7 +36,7 @@ const_binpt = 27
 [experiment]
 lo_freq      = 3 # GHz
 rf_power     = 7 # dBm
-bin_step     = 256
+bin_step     = 32
 cal_datadir  = "dss_cal"
 srr_datadir  = "dss_srr"
 pause_time   = 0.5 # should be > (1/bandwidth * FFT_size * acc_len * 2) in

@@ -18,6 +18,7 @@ def main():
     addr_width = config["spectra"]["addr_width"]
     data_width = config["spectra"]["data_width"]
     bandwidth  = config["spectra"]["bandwidth"]
+    dBFS       = config["spectra"]["dBFS"]
     reset_reg  = config["spectra"]["reset_reg"]
     acc_reg    = config["spectra"]["acc_reg"]
     acc_len    = config["spectra"]["acc_len"]
@@ -28,9 +29,6 @@ def main():
     dtype   = ">u" + str(data_width//8)
     n_bins  = 2**addr_width * n_brams 
     freqs   = np.linspace(0, bandwidth, n_bins, endpoint=False)
-    #TODO: define dBFS via formula
-    #dBFS    = 6.02*adc_bits + 1.76 + 10*np.log10(n_bins)
-    dBFS    = 90
 
     # initialize rfsoc
     rfsoc = cd.initialize_rfsoc(config)
@@ -74,7 +72,7 @@ def create_figure(n_specs, bandwidth, dBFS):
         ax.set_ylim(-dBFS-2, 0)
         ax.set_xlabel("Frequency [MHz]")
         ax.set_ylabel("Power [dBFS]")
-        ax.set_title("In " + str(i))
+        ax.set_title("Spectrum " + str(i))
         ax.grid()
 
         line, = ax.plot([], [], animated=True)

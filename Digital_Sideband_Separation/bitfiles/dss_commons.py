@@ -1,7 +1,10 @@
-import tomli, tarfile, shutil, pyvisa
+import os, tomli, tarfile, shutil, pyvisa
 import numpy as np
 from datetime import datetime
 import calandigital as cd
+
+# global variables
+global rfsoc
 
 # get configuration parameters
 with open("dss_2in_2048ch_983mhz_real.toml", "rb") as f:
@@ -25,8 +28,7 @@ rf_genname  = config["experiment"]["rf_generator"]
 rf_power    = config["experiment"]["rf_power"]
 
 # compute useful variables
-#TODO: define dBFS via formula
-dBFS          = 90
+dBFS          = 96
 n_bins        = 2**addr_width * len(spec_brams[0])
 if_freqs      = np.linspace(0, bandwidth, n_bins, endpoint=False) # MHz
 test_bins     = range(1, n_bins, bin_step)
@@ -39,7 +41,8 @@ bram_ab_re    = corr_brams[0]
 bram_ab_im    = corr_brams[1]
 
 # create RF generator
-rm = pyvisa.ResourceManager("@py")
+#rm = pyvisa.ResourceManager("@py")
+rm = pyvisa.ResourceManager("@sim")
 rf_generator = rm.open_resource(rf_genname)
 
 # make teatinfo dict
@@ -56,12 +59,14 @@ testinfo["rf_generator"] = rf_genname
 testinfo["rf power"]     = rf_power
 
 def rfsoc_initialization():
+    global rfsoc
+
     # initialize rfsoc communication
     rfsoc = cd.initialize_rfsoc(config)
     
     # set accumulation and reset counters
-    print("Setting accum register to", dss.acc_len, "...", end="")
-    rfsoc.write_int(dss.acc_reg, dss.acc_len)
+    print("Setting accum register to", acc_len, "...", end="")
+    rfsoc.write_int(acc_reg, acc_len)
     print("done")
     print("Resseting counter registers...", end="")
     rfsoc.write_int(reset_reg, 1)
