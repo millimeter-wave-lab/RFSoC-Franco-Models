@@ -1,4 +1,5 @@
 # imports
+import warnings
 import numpy as np
 import casperfpga
 
@@ -62,6 +63,25 @@ def read_interleave_data(rfsoc, brams, awidth, dwidth, dtype):
     interleaved_data = np.vstack(bramdata_list).reshape((-1,), order='F')
     return interleaved_data
 
+def write_interleaved_data(rfsoc, brams, data):
+    """
+    Deinterleaves an array of interleaved data, and writes each deinterleaved
+    array into a bram of a list of brams.
+    :param rfsoc: CalanFpga object to communicate with RFSoC.
+    :param brams: list of brams to write into.
+    :param data: array of data to write. (Every Numpy type is accepted but the
+        data converted into bytes before is written).
+    """
+    ndata  = len(data)
+    nbrams = len(brams)
+
+    # deinterleave data into arrays (this works, believe me)
+    bramdata_list = np.transpose(np.reshape(data, (ndata/nbrams, nbrams)))
+    
+    # write data into brams
+    for bram, bramdata in zip(brams, bramdata_list):
+        roach.write(bram, bramdata.tobytes(), 0)
+
 def scale_and_dBFS_specdata(data, acclen, dBFS):
     """
     Scales spectral data by an accumulation length, and converts
@@ -79,3 +99,52 @@ def scale_and_dBFS_specdata(data, acclen, dBFS):
     # convert data to dBFS
     data = 10*np.log10(data+1) - dBFS
     return data
+
+def float2fixed(data, nbits, binpt, signed=True, warn=True):
+    """
+    Convert an array of floating points to fixed points, with width number of
+    bits nbits, and binary point binpt. Optional warinings can be printed
+    to check for overflow in conversion.
+    :param data: data to convert.
+    :param nbits: number of bits of the fixed point format.
+    :param binpt: binary point of the fixed point format.
+    :param signed: if true use signed representation, else use unsigned.
+    :param warn: if true print overflow warinings.
+    :return: data in fixed point format.
+    """
+    if warn:
+        check_overflow(data, nbits, binpt, signed)
+
+    nbytes = int(np.ceil(nbits/8))
+    dtype = '>i'+str(nbytes) if signed else '>u'+str(nbytes)
+
+    fixedpoint_data = (2**binpt * data).astype(dtype)
+    return fixedpoint_data
+
+def check_overflow(data, nbits, binpt, signed):
+    """
+    Check if the values of an array exceed the limit values given by a 
+    fixed point representation, and print a warining if that is the case.
+    :param data: data to check.
+    :param nbits: number of bits of the fixed point format.
+    :param binpt: binary point of the fixed point format.
+    :param signed: if true use signed representation, else use unsigned.
+    """
+    if signed:
+        # limit values for signed fixed point
+        max_val = ( 2.0**(nbits-1)-1) / (2**binpt)
+        min_val = (-2.0**(nbits-1))   / (2**binpt)
+    else:
+        # limit values for unsigned fixed point
+        max_val = ( 2.0** nbits   -1) / (2**binpt)
+        min_val =   0
+
+    # check overflow
+    if np.max(data) > max_val:
+        warnings.warn("Maximum value exceeded in overflow check.\n" + \
+            "Max allowed value: " + str(max_val) + "\n" + \
+            "Max value in data: " + str(np.max(data)))
+    if np.min(data) < min_val:
+        warnings.warn("Minimum value exceeded in overflow check.\n" + \
+            "Min allowed value: " + str(min_val) + "\n" + \
+            "Min value in data: " + str(np.min(data)))

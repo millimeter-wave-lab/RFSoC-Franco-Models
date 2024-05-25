@@ -1,4 +1,4 @@
-import os, tomli, tarfile, shutil, pyvisa
+import os, tomli, json, tarfile, shutil, pyvisa
 import numpy as np
 from datetime import datetime
 import calandigital as cd
@@ -19,6 +19,11 @@ reset_reg   = config["spectra"]["reset_reg"]
 acc_reg     = config["spectra"]["acc_reg"]
 acc_len     = config["spectra"]["acc_len"]
 corr_brams  = config["dss"]["corr_brams"]
+synth_brams = config["dss"]["synth_brams"]
+synth_brams = config["dss"]["synth_brams"]
+const_brams = config["dss"]["const_brams"]
+const_nbits = config["dss"]["const_nbits"]
+const_binpt = config["dss"]["const_binpt"]
 lo_freq     = config["experiment"]["lo_freq"]
 bin_step    = config["experiment"]["bin_step"]
 cal_datadir = config["experiment"]["cal_datadir"]
@@ -26,6 +31,9 @@ srr_datadir = config["experiment"]["srr_datadir"]
 pause_time  = config["experiment"]["pause_time"]
 rf_genname  = config["experiment"]["rf_generator"]
 rf_power    = config["experiment"]["rf_power"]
+load_consts = config["experiment"]["load_consts"]
+load_ideal  = config["experiment"]["load_ideal"]
+cal_tar     = config["experiment"]["cal_tar"]
 
 # compute useful variables
 dBFS          = 96
@@ -39,6 +47,14 @@ bram_a2       = spec_brams[0]
 bram_b2       = spec_brams[1] 
 bram_ab_re    = corr_brams[0]
 bram_ab_im    = corr_brams[1]
+bram_lsb      = synth_brams[0]
+bram_usb      = synth_brams[1]
+bram_clsb_re  = const_brams[0][0]
+bram_clsb_im  = const_brams[0][1]
+bram_cusb_re  = const_brams[1][0]
+bram_cusb_im  = const_brams[1][1]
+pow_dtype     = ">u" + str(data_width//8)
+corr_dtype    = ">i" + str(data_width//8)
 
 # create RF generator
 #rm = pyvisa.ResourceManager("@py")
@@ -57,6 +73,22 @@ testinfo["bin_step"]     = bin_step
 testinfo["lo_freq"]      = lo_freq
 testinfo["rf_generator"] = rf_genname
 testinfo["rf power"]     = rf_power
+testinfo["load_consts"]  = load_consts
+testinfo["load_ideal"]   = load_ideal
+testinfo["ca_ltar"]      = cal_tar
+
+# common functions
+def make_data_directory(datadir):
+    """
+    Make directory where to save all the measurement data.
+    """
+    os.makedirs(datadir, exist_ok=True)
+    with open(cal_datadir + "/testinfo.json", "w") as f:
+        json.dump(testinfo, f, indent=4, sort_keys=True)
+
+    # make rawdata folders
+    os.makedirs(datadir + "/rawdata_tone_usb", exist_ok=True)
+    os.makedirs(datadir + "/rawdata_tone_lsb", exist_ok=True)
 
 def rfsoc_initialization():
     global rfsoc
@@ -77,6 +109,21 @@ def rfsoc_initialization():
     print("Setting instruments power and outputs...", end="")
     rf_generator.write("power " + str(rf_power))
     rf_generator.write("outp on")
+    print("done")
+
+def make_post_measurements_actions():
+    """
+    Makes all the actions required after measurements:
+    - turn off sources
+    - compress data
+    """
+    print("Turning off instruments...", end="")
+    rf_generator.write("outp off")
+    rm.close()
+    print("done")
+
+    print("Compressing data...", end="")
+    compress_data(cal_datadir)
     print("done")
 
 def compress_data(datadir):
