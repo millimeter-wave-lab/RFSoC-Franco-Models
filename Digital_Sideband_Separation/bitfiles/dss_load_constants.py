@@ -72,8 +72,8 @@ def load_comp_constants(rfsoc, consts, bram_re, bram_im):
     consts_im = np.imag(consts)
 
     # convert data into fixed point representation
-    consts_re_fixed = cd.float2fixed(consts_re, consts_nbits, consts_binpt)
-    consts_im_fixed = cd.float2fixed(consts_im, consts_nbits, consts_binpt)
+    consts_re_fixed = cd.float2fixed(consts_re, const_nbits, const_binpt)
+    consts_im_fixed = cd.float2fixed(consts_im, const_nbits, const_binpt)
 
     # load data
     cd.write_interleaved_data(rfsoc, bram_re, consts_re_fixed)

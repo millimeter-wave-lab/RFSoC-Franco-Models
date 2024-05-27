@@ -28,7 +28,7 @@ def make_pre_measurements_actions():
     - initizalize RFSoC and generator communications.
     - creating plotting and data saving elements
     """
-    global fig, lines
+    global fig, lines, rfsoc
 
     # create plot and data folder
     print("Setting up plotting and data saving elements...", end="")

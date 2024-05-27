@@ -25,7 +25,7 @@ def main():
 def make_pre_measurements_actions():
     """
     Makes all the actions in preparation for the measurements:
-    - initizalize ROACH and generator communications.
+    - initizalize RFSoC and generator communications.
     - creating plotting and data saving elements
     """
     global fig, lines
@@ -45,17 +45,17 @@ def make_dss_measurements():
     """
     # loading calibration constants
     if load_consts:
-        dss_load_constants(roach, load_ideal, 0-1j, cal_tar)
+        dss_load_constants(rfsoc, load_ideal, 0-1j, cal_tar)
 
     print("Starting tone sweep in upper sideband...", end="")
     sweep_time = time.time()
     usb_toneusb, lsb_toneusb = get_srrdata(rf_freqs_usb, "usb")
-    print("done", int(time.time() - sweep_time), "[s])")
+    print("done", int(time.time() - sweep_time), "[s]")
         
     print("Starting tone sweep in lower sideband...", end="")
     sweep_time = time.time()
     usb_tonelsb, lsb_tonelsb = get_srrdata(rf_freqs_lsb, "lsb")
-    print("done", int(time.time() - sweep_time), "[s])")
+    print("done", int(time.time() - sweep_time), "[s]")
 
     print("Saving data...", end="")
     np.savez(srr_datadir+"/srrdata", 

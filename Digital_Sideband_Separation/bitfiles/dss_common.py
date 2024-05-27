@@ -3,9 +3,6 @@ import numpy as np
 from datetime import datetime
 import calandigital as cd
 
-# global variables
-global rfsoc
-
 # get configuration parameters
 with open("dss_2in_2048ch_983mhz_real.toml", "rb") as f:
     config = tomli.load(f)
@@ -56,6 +53,9 @@ bram_cusb_im  = const_brams[1][1]
 pow_dtype     = ">u" + str(data_width//8)
 corr_dtype    = ">i" + str(data_width//8)
 
+# create RFSoC
+rfsoc = cd.initialize_rfsoc(config)
+
 # create RF generator
 #rm = pyvisa.ResourceManager("@py")
 rm = pyvisa.ResourceManager("@sim")
@@ -83,7 +83,7 @@ def make_data_directory(datadir):
     Make directory where to save all the measurement data.
     """
     os.makedirs(datadir, exist_ok=True)
-    with open(cal_datadir + "/testinfo.json", "w") as f:
+    with open(datadir + "/testinfo.json", "w") as f:
         json.dump(testinfo, f, indent=4, sort_keys=True)
 
     # make rawdata folders
@@ -91,11 +91,6 @@ def make_data_directory(datadir):
     os.makedirs(datadir + "/rawdata_tone_lsb", exist_ok=True)
 
 def rfsoc_initialization():
-    global rfsoc
-
-    # initialize rfsoc communication
-    rfsoc = cd.initialize_rfsoc(config)
-    
     # set accumulation and reset counters
     print("Setting accum register to", acc_len, "...", end="")
     rfsoc.write_int(acc_reg, acc_len)
@@ -111,7 +106,9 @@ def rfsoc_initialization():
     rf_generator.write("outp on")
     print("done")
 
-def make_post_measurements_actions():
+    return rfsoc
+
+def make_post_measurements_actions(datadir):
     """
     Makes all the actions required after measurements:
     - turn off sources
@@ -123,7 +120,7 @@ def make_post_measurements_actions():
     print("done")
 
     print("Compressing data...", end="")
-    compress_data(cal_datadir)
+    compress_data(datadir)
     print("done")
 
 def compress_data(datadir):

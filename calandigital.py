@@ -76,11 +76,11 @@ def write_interleaved_data(rfsoc, brams, data):
     nbrams = len(brams)
 
     # deinterleave data into arrays (this works, believe me)
-    bramdata_list = np.transpose(np.reshape(data, (ndata/nbrams, nbrams)))
+    bramdata_list = np.transpose(np.reshape(data, (ndata//nbrams, nbrams)))
     
     # write data into brams
     for bram, bramdata in zip(brams, bramdata_list):
-        roach.write(bram, bramdata.tobytes(), 0)
+        rfsoc.write(bram, bramdata.tobytes(), 0)
 
 def scale_and_dBFS_specdata(data, acclen, dBFS):
     """
