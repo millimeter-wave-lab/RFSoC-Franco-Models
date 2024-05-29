@@ -7,7 +7,7 @@ sys.path.append("../..")
 import calandigital as cd
 from dss_common import *
 
-def dss_load_constants(rfsoc, load_ideal, ideal_const=0+1j, caltar=""):
+def dss_load_constants(rfsoc, load_ideal, ideal_const, caltar):
     """
     Load load digital sideband separation constants.
     :param rfsoc: FpgaClient object to communicate with RFSoC.
@@ -24,7 +24,7 @@ def dss_load_constants(rfsoc, load_ideal, ideal_const=0+1j, caltar=""):
         print("Using constants from calibration directory")
         consts_lsb, consts_usb = compute_consts(caltar)
 
-    print("Loading constants...")
+    print("Loading constants...", end="")
     load_comp_constants(rfsoc, consts_usb, bram_cusb_re, bram_cusb_im)
     load_comp_constants(rfsoc, consts_lsb, bram_clsb_re, bram_clsb_im)
     print("done")

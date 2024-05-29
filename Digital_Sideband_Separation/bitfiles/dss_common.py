@@ -15,6 +15,7 @@ bandwidth   = config["spectra"]["bandwidth"]
 reset_reg   = config["spectra"]["reset_reg"]
 acc_reg     = config["spectra"]["acc_reg"]
 acc_len     = config["spectra"]["acc_len"]
+dBFS        = config["spectra"]["dBFS"] 
 corr_brams  = config["dss"]["corr_brams"]
 synth_brams = config["dss"]["synth_brams"]
 synth_brams = config["dss"]["synth_brams"]
@@ -33,7 +34,6 @@ load_ideal  = config["experiment"]["load_ideal"]
 cal_tar     = config["experiment"]["cal_tar"]
 
 # compute useful variables
-dBFS          = 96
 n_bins        = 2**addr_width * len(spec_brams[0])
 if_freqs      = np.linspace(0, bandwidth, n_bins, endpoint=False) # MHz
 test_bins     = range(1, n_bins, bin_step)
@@ -44,12 +44,12 @@ bram_a2       = spec_brams[0]
 bram_b2       = spec_brams[1] 
 bram_ab_re    = corr_brams[0]
 bram_ab_im    = corr_brams[1]
-bram_lsb      = synth_brams[0]
-bram_usb      = synth_brams[1]
-bram_clsb_re  = const_brams[0][0]
-bram_clsb_im  = const_brams[0][1]
-bram_cusb_re  = const_brams[1][0]
-bram_cusb_im  = const_brams[1][1]
+bram_usb      = synth_brams[0]
+bram_lsb      = synth_brams[1]
+bram_cusb_re  = const_brams[0][0]
+bram_cusb_im  = const_brams[0][1]
+bram_clsb_re  = const_brams[1][0]
+bram_clsb_im  = const_brams[1][1]
 pow_dtype     = ">u" + str(data_width//8)
 corr_dtype    = ">i" + str(data_width//8)
 
@@ -57,8 +57,8 @@ corr_dtype    = ">i" + str(data_width//8)
 rfsoc = cd.initialize_rfsoc(config)
 
 # create RF generator
-#rm = pyvisa.ResourceManager("@py")
-rm = pyvisa.ResourceManager("@sim")
+rm = pyvisa.ResourceManager("@py")
+#rm = pyvisa.ResourceManager("@sim")
 rf_generator = rm.open_resource(rf_genname)
 
 # make teatinfo dict
