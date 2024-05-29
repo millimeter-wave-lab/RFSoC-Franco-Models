@@ -4,7 +4,7 @@ adc_bits  = 16
 program   = true
 
 [snapshots]
-snap_names = ["adc_snapshot", "adc_snapshot1"]
+snap_names = ["adc_snapshot0", "adc_snapshot1"]
 n_samples  = 256
 
 [spectra]
