@@ -36,6 +36,7 @@ def main():
     # invert parameters
     combined_bin = invert_delay * n_brams
     combined_freq = freqs[combined_bin]
+    uncombined_freqs = freqs[:combined_bin]
     combined_freqs = freqs[combined_bin:]
 
     # initialize rfsoc
@@ -59,14 +60,20 @@ def main():
         # band 1
         spec_data = cd.read_interleave_data(rfsoc, bram_names[0], addr_width, data_width, dtype)
         spec_data = cd.scale_and_dBFS_specdata(spec_data, acc_len, dBFS)
-        lines[0].set_data(freqs, spec_data)
-        lines[1].set_data(freqs, spec_data)
+        lines[0].set_data(uncombined_freqs, spec_data[:combined_bin])
+        lines[1].set_data(combined_freqs, spec_data[combined_bin:])
+
+        # combined band
+        spec_data = cd.read_interleave_data(rfsoc, bram_names[2], addr_width, data_width, dtype)
+        spec_data = cd.scale_and_dBFS_specdata(spec_data, acc_len, dBFS)
+        lines[2].set_data(combined_freqs, spec_data[combined_bin:])
 
         # band 2
         spec_data = cd.read_interleave_data(rfsoc, bram_names[1], addr_width, data_width, dtype)
         spec_data = cd.scale_and_dBFS_specdata(spec_data, acc_len, dBFS)
-        lines[3].set_data(freqs, spec_data)
-        lines[4].set_data(freqs, spec_data)
+        spec_data = np.flip(spec_data)
+        lines[3].set_data(uncombined_freqs, spec_data[:combined_bin])
+        lines[4].set_data(combined_freqs, spec_data[combined_bin:])
 
         return lines
 
@@ -77,8 +84,8 @@ def create_figure(bandwidth, combined_freq, dBFS):
     """
     Create figure with the proper axes settings for plotting spectra.
     """
-
-    fig, axes = plt.subplots(1, 3, squeeze=True)
+    ratios=[bandwidth, bandwidth-combined_freq, bandwidth]
+    fig, axes = plt.subplots(1, 3, width_ratios=ratios, sharey=True)
     fig.set_tight_layout(True)
     lines = []
 
@@ -98,7 +105,7 @@ def create_figure(bandwidth, combined_freq, dBFS):
     axes[1].set_xlim(combined_freq, bandwidth)
     axes[1].set_ylim(-dBFS-2, 0)
     axes[1].set_xlabel("Frequency [MHz]")
-    axes[1].set_ylabel("Power [dBFS]")
+    #axes[1].set_ylabel("Power [dBFS]")
     axes[1].set_title("Combined spectrum")
     axes[1].grid()
     line, = axes[1].plot([], [], animated=True, color="green")
@@ -108,7 +115,7 @@ def create_figure(bandwidth, combined_freq, dBFS):
     axes[2].set_xlim(bandwidth, 0)
     axes[2].set_ylim(-dBFS-2, 0)
     axes[2].set_xlabel("Frequency [MHz]")
-    axes[2].set_ylabel("Power [dBFS]")
+    #axes[2].set_ylabel("Power [dBFS]")
     axes[2].set_title("Spectrum Band 2")
     axes[2].grid()
     line1, = axes[2].plot([], [], animated=True, color="blue")
