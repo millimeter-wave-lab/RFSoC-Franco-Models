@@ -15,7 +15,7 @@ def main():
     # get config data
     args = parser.parse_args()
     with open(args.config_file, "rb") as f:
-        config   = tomli.load(f)
+        config = tomli.load(f)
     bram_names   = config["spectra"]["bram_names"]
     addr_width   = config["spectra"]["addr_width"]
     data_width   = config["spectra"]["data_width"]
@@ -24,31 +24,33 @@ def main():
     reset_reg    = config["spectra"]["reset_reg"]
     acc_reg      = config["spectra"]["acc_reg"]
     acc_len      = config["spectra"]["acc_len"]
+    invert_reg   = config["multiband"]["invert_reg"]
     invert_delay = config["multiband"]["invert_delay"]
 
     # useful parameters
-    n_specs = len(bram_names)
     n_brams = len(bram_names[0])
     dtype   = ">u" + str(data_width//8)
     n_bins  = 2**addr_width * n_brams 
     freqs   = np.linspace(0, bandwidth, n_bins, endpoint=False)
 
     # invert parameters
-    combined_bin = invert_delay * n_brams
+    combined_bin = (2**addr_width-invert_delay) * n_brams
     combined_freq = freqs[combined_bin]
     uncombined_freqs = freqs[:combined_bin]
     combined_freqs = freqs[combined_bin:]
 
     # initialize rfsoc
-    #rfsoc = cd.initialize_rfsoc(config)
-    rfsoc = cd.DummyRFSoC()
+    rfsoc = cd.initialize_rfsoc(config)
 
     # create figure
     fig, lines = create_figure(bandwidth, combined_freq, dBFS)
     
     # initial setting of registers
-    print("Setting accumulation register to " + str(acc_len) + "...", end="")
+    print("Setting accumulation register to ", acc_len, "...", end="")
     rfsoc.write_int(acc_reg, acc_len)
+    print("done")
+    print("Setting invert delay register to ", invert_delay, "...", end="")
+    rfsoc.write_int(invert_reg, invert_delay)
     print("done")
     print("Resseting counter registers...", end="")
     rfsoc.write_int(reset_reg, 1)
@@ -71,7 +73,6 @@ def main():
         # band 2
         spec_data = cd.read_interleave_data(rfsoc, bram_names[1], addr_width, data_width, dtype)
         spec_data = cd.scale_and_dBFS_specdata(spec_data, acc_len, dBFS)
-        spec_data = np.flip(spec_data)
         lines[3].set_data(uncombined_freqs, spec_data[:combined_bin])
         lines[4].set_data(combined_freqs, spec_data[combined_bin:])
 
@@ -106,7 +107,7 @@ def create_figure(bandwidth, combined_freq, dBFS):
     axes[1].set_ylim(-dBFS-2, 0)
     axes[1].set_xlabel("Frequency [MHz]")
     #axes[1].set_ylabel("Power [dBFS]")
-    axes[1].set_title("Combined spectrum")
+    axes[1].set_title("Combined Spectrum")
     axes[1].grid()
     line, = axes[1].plot([], [], animated=True, color="green")
     lines.append(line)

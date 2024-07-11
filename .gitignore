@@ -12,3 +12,4 @@
 *.Xil*
 *.autosave
 *.pyc
+*.npz

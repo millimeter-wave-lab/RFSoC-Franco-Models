@@ -1,4 +1,5 @@
 # imports
+import time
 import warnings
 import numpy as np
 import casperfpga
@@ -8,8 +9,13 @@ def initialize_rfsoc(config):
     # program rfsoc if in config or it has no program
     if config["program"] or not rfsoc.is_running():
         rfsoc.upload_to_ram_and_program(config["bitfile"])
-        rfdc = rfsoc.adcs['rfdc']
+        time.sleep(0.1)
+        rfdc = rfsoc.adcs["rfdc"]
         rfdc.init()
+        time.sleep(0.1)
+        rfdc.progpll("lmk", rfdc.show_clk_files()[1])
+        rfdc.progpll("lmx", rfdc.show_clk_files()[0])
+        time.sleep(0.1)
         print("RFDC Status:")
         rfdc.status()
     return rfsoc
