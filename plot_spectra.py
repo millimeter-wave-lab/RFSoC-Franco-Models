@@ -61,7 +61,7 @@ def create_figure(n_specs, bandwidth, dBFS):
     """
     Create figure with the proper axes settings for plotting spectra.
     """
-    axmap = {1 : (1,1), 2 : (1,2), 4 : (2,2), 16 : (4,4)}
+    axmap = {1 : (1,1), 2 : (1,2), 3 : (2,2), 4 : (2,2), 16 : (4,4)}
 
     fig, axes = plt.subplots(*axmap[n_specs], squeeze=False)
     fig.set_tight_layout(True)

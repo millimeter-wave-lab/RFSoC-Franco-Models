@@ -1,4 +1,4 @@
-IP        = "169.254.45.81"
+IP        = "169.254.158.218"
 bitfile   = "dss_2in_2048ch_983mhz_real.fpg"
 adc_bits  = 16
 program   = false
