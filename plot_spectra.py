@@ -13,7 +13,6 @@ def main():
     args = parser.parse_args()
     with open(args.config_file, "rb") as f:
         config = tomli.load(f)
-    adc_bits   = config["adc_bits"]
     bram_names = config["spectra"]["bram_names"]
     addr_width = config["spectra"]["addr_width"]
     data_width = config["spectra"]["data_width"]

@@ -42,7 +42,7 @@ def read_data(rfsoc, bram, awidth, dwidth, dtype):
     :return: array with the read data.
     """
     depth = 2**awidth
-    rawdata  = rfsoc.read(bram, depth*dwidth/8, 0)
+    rawdata  = rfsoc.read(bram, depth*dwidth//8, 0)
     bramdata = np.frombuffer(rawdata, dtype=dtype)
     bramdata = bramdata.astype(float)
     return bramdata
@@ -148,3 +148,13 @@ def check_overflow(data, nbits, binpt, signed):
         warnings.warn("Minimum value exceeded in overflow check.\n" + \
             "Min allowed value: " + str(min_val) + "\n" + \
             "Min value in data: " + str(np.min(data)))
+
+class DummyRFSoC():
+    def write_int(self, device, reg):
+        pass
+    def write(self, device, nbytes, offset=0):
+        pass
+    def read_int(self, device):
+        return 0
+    def read(self, device, nbytes, offset=0):
+        return bytearray(nbytes)
