@@ -6,7 +6,7 @@ import sys
 sys.path.append("../..")
 import calandigital as cd
 
-N = 100
+N = 1000
 
 with open("invert_test2.toml", "rb") as f:
     config = tomli.load(f)
