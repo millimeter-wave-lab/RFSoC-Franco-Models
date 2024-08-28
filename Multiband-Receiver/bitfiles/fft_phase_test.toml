@@ -1,5 +1,5 @@
-IP        = "10.42.0.223"
-bitfile   = "spec_1in_2048ch_983mhz_real.fpg"
+IP        = "169.254.123.76"
+bitfile   = "fft_phase_test.fpg"
 adc_bits  = 16
 program   = false
 

@@ -1,5 +1,5 @@
 import argparse
-import tomli
+import tomllib
 import calandigital as cd
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,7 +12,7 @@ def main():
     # get config data
     args = parser.parse_args()
     with open(args.config_file, "rb") as f:
-        config = tomli.load(f)
+        config = tomllib.load(f)
     bram_names = config["spectra"]["bram_names"]
     addr_width = config["spectra"]["addr_width"]
     data_width = config["spectra"]["data_width"]
