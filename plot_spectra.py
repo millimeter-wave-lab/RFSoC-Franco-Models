@@ -14,6 +14,7 @@ def main():
     with open(args.config_file, "rb") as f:
         config = tomllib.load(f)
     bram_names = config["spectra"]["bram_names"]
+    spec_names = config["spectra"]["spec_names"]
     addr_width = config["spectra"]["addr_width"]
     data_width = config["spectra"]["data_width"]
     bandwidth  = config["spectra"]["bandwidth"]
@@ -30,10 +31,11 @@ def main():
     freqs   = np.linspace(0, bandwidth, n_bins, endpoint=False)
 
     # initialize rfsoc
-    rfsoc = cd.initialize_rfsoc(config)
+    #rfsoc = cd.initialize_rfsoc(config)
+    rfsoc = cd.DummyRFSoC()
 
     # create figure
-    fig, lines = create_figure(n_specs, bandwidth, dBFS)
+    fig, lines = create_figure(n_specs, spec_names, bandwidth, dBFS)
     
     # initial setting of registers
     print("Setting accumulation register to " + str(acc_len) + "...", end="")
@@ -56,7 +58,7 @@ def main():
     ani = FuncAnimation(fig, animate, blit=True, cache_frame_data=False)
     plt.show()
 
-def create_figure(n_specs, bandwidth, dBFS):
+def create_figure(n_specs, spec_names, bandwidth, dBFS):
     """
     Create figure with the proper axes settings for plotting spectra.
     """
@@ -66,12 +68,12 @@ def create_figure(n_specs, bandwidth, dBFS):
     fig.set_tight_layout(True)
 
     lines = []
-    for i, ax in enumerate(axes.flatten()):
+    for ax, spec_name in zip(axes.flatten(), spec_names):
         ax.set_xlim(0, bandwidth)
         ax.set_ylim(-dBFS-2, 0)
         ax.set_xlabel("Frequency [MHz]")
         ax.set_ylabel("Power [dBFS]")
-        ax.set_title("Spectrum " + str(i))
+        ax.set_title(spec_name)
         ax.grid()
 
         line, = ax.plot([], [], animated=True)

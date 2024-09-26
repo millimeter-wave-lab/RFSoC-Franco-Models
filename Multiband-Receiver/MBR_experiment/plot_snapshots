@@ -1,0 +1,1 @@
+python ../../plot_snapshots.py mbr_config.toml

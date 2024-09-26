@@ -1,6 +1,6 @@
 # imports
 import argparse
-import tomli
+import tomllib
 import calandigital as cd
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
@@ -14,20 +14,22 @@ def main():
     # get config data
     args = parser.parse_args()
     with open(args.config_file, "rb") as f:
-        config = tomli.load(f)
-    adc_bits  = config["adc_bits"]
+        config = tomllib.load(f)
+    n_bits    = config["snapshots"]["n_bits"]
     snapshots = config["snapshots"]["snap_names"]
     n_samples = config["snapshots"]["n_samples"]
 
     # initialize rfsoc
-    rfsoc = cd.initialize_rfsoc(config)
+    #rfsoc = cd.initialize_rfsoc(config)
+    rfsoc = cd.DummyRFSoC()
 
     # create figure
-    fig, lines = create_figure(snapshots, n_samples, adc_bits)
+    fig, lines = create_figure(snapshots, n_samples, n_bits)
 
     # animation function
     def animate(_):
-        snapdata_list = cd.read_snapshots(rfsoc, snapshots)
+        #snapdata_list = cd.read_snapshots(rfsoc, snapshots)
+        snapdata_list = [rfsoc.read(snap, n_bits*n_samples) for snap in snapshots]
         for line, snapdata in zip(lines, snapdata_list):
             line.set_data(range(n_samples), snapdata[:n_samples])
         return lines
@@ -36,7 +38,7 @@ def main():
     ani = FuncAnimation(fig, animate, blit=True, cache_frame_data=False)
     plt.show()
 
-def create_figure(snapshots, n_samples, adc_bits):
+def create_figure(snapshots, n_samples, n_bits):
     """
     Create figure with the proper axes settings for plotting snaphots.
     """
@@ -49,7 +51,7 @@ def create_figure(snapshots, n_samples, adc_bits):
     lines = []
     for snapshot, ax in zip(snapshots, axes.flatten()):
         ax.set_xlim(0, n_samples)
-        ax.set_ylim(-2**(adc_bits-1), 2**(adc_bits-1))
+        ax.set_ylim(-2**(n_bits-1), 2**(n_bits-1))
         ax.set_xlabel("Samples")
         ax.set_ylabel("Amplitude")
         ax.set_title(snapshot)
