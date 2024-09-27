@@ -65,8 +65,9 @@ srr_datadir  = "dss2_srr"
 cal_tar      = "dss2_cal.tar.gz"
 
 [multiband]
-invert_reg = "invert_delay"
+invert_reg   = "invert_delay"
 invert_delay = 128
+comb_brams   = ["comb0", "comb1", "comb2", "comb3"] 
 
 [experiment]
 rf_power     = -25 # dBm
