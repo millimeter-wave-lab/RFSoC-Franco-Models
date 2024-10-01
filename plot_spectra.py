@@ -31,8 +31,8 @@ def main():
     freqs   = np.linspace(0, bandwidth, n_bins, endpoint=False)
 
     # initialize rfsoc
-    #rfsoc = cd.initialize_rfsoc(config)
-    rfsoc = cd.DummyRFSoC()
+    rfsoc = cd.initialize_rfsoc(config)
+    #rfsoc = cd.DummyRFSoC()
 
     # create figure
     fig, lines = create_figure(n_specs, spec_names, bandwidth, dBFS)

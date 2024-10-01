@@ -7,6 +7,9 @@ sys.path.append("../..")
 import calandigital as cd
 from dss_common import *
 
+def main():
+    dss_load_constants(rfsoc, load_ideal, 0-1j, cal_tar)
+
 def dss_load_constants(rfsoc, load_ideal, ideal_const, caltar):
     """
     Load load digital sideband separation constants.
@@ -78,3 +81,6 @@ def load_comp_constants(rfsoc, consts, bram_re, bram_im):
     # load data
     cd.write_interleaved_data(rfsoc, bram_re, consts_re_fixed)
     cd.write_interleaved_data(rfsoc, bram_im, consts_im_fixed)
+
+if __name__ == "__main__":
+    main()

@@ -55,8 +55,8 @@ pow_dtype     = ">u" + str(data_width//8)
 corr_dtype    = ">i" + str(data_width//8)
 
 # create RFSoC
-#rfsoc = cd.initialize_rfsoc(config)
-rfsoc = cd.DummyRFSoC()
+rfsoc = cd.initialize_rfsoc(config)
+#rfsoc = cd.DummyRFSoC()
 
 # create RF generator
 #rm = pyvisa.ResourceManager("@py")

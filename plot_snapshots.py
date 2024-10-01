@@ -20,16 +20,16 @@ def main():
     n_samples = config["snapshots"]["n_samples"]
 
     # initialize rfsoc
-    #rfsoc = cd.initialize_rfsoc(config)
-    rfsoc = cd.DummyRFSoC()
+    rfsoc = cd.initialize_rfsoc(config)
+    #rfsoc = cd.DummyRFSoC()
 
     # create figure
     fig, lines = create_figure(snapshots, n_samples, n_bits)
 
     # animation function
     def animate(_):
-        #snapdata_list = cd.read_snapshots(rfsoc, snapshots)
-        snapdata_list = [rfsoc.read(snap, n_bits*n_samples) for snap in snapshots]
+        snapdata_list = cd.read_snapshots(rfsoc, snapshots)
+        #snapdata_list = [rfsoc.read(snap, n_bits*n_samples) for snap in snapshots]
         for line, snapdata in zip(lines, snapdata_list):
             line.set_data(range(n_samples), snapdata[:n_samples])
         return lines

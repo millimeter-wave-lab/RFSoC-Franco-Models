@@ -1,4 +1,4 @@
-IP        = "169.254.123.76"
+IP        = "192.168.2.101"
 bitfile   = "mbr_2048ch_983mhz_real.fpg"
 program   = true
 
@@ -76,5 +76,5 @@ pause_time   = 0.5 # should be > (1/bandwidth * FFT_size * acc_len * 2) in
                    # order for the spectra to be fully computed after a
                    # tone change
 load_consts  = true
-load_ideal   = false
+load_ideal   = true
 rf_generator = "TCPIP::169.254.99.253::INSTR"
