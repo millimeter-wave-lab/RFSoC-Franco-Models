@@ -37,8 +37,8 @@ def main():
     combined_freqs = freqs[combined_bin:]
 
     # initialize rfsoc
-    #rfsoc = cd.initialize_rfsoc(config)
-    rfsoc = cd.DummyRFSoC()
+    rfsoc = cd.initialize_rfsoc(config)
+    #rfsoc = cd.DummyRFSoC()
 
     # create figure
     fig, lines = create_figure(bandwidth, combined_freq, dBFS)

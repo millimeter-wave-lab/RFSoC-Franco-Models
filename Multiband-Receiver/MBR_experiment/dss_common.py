@@ -8,7 +8,6 @@ with open("mbr_config.toml", "rb") as f:
     config = tomli.load(f)
 
 # get variables from config dict
-spec_brams  = config["spectra"]["bram_names"]
 addr_width  = config["spectra"]["addr_width"] 
 data_width  = config["spectra"]["data_width"] 
 bandwidth   = config["spectra"]["bandwidth"]
@@ -19,6 +18,7 @@ dBFS        = config["spectra"]["dBFS"]
 dss_band    = config["dss"]["dss_band"]
 const_nbits = config["dss"]["const_nbits"]
 const_binpt = config["dss"]["const_binpt"]
+spec_brams  = config[dss_band]["spec_brams"]
 corr_brams  = config[dss_band]["corr_brams"]
 synth_brams = config[dss_band]["synth_brams"]
 synth_brams = config[dss_band]["synth_brams"]
@@ -59,8 +59,8 @@ rfsoc = cd.initialize_rfsoc(config)
 #rfsoc = cd.DummyRFSoC()
 
 # create RF generator
-#rm = pyvisa.ResourceManager("@py")
-rm = pyvisa.ResourceManager("@sim")
+rm = pyvisa.ResourceManager("@py")
+#rm = pyvisa.ResourceManager("@sim")
 rf_generator = rm.open_resource(rf_genname)
 
 # make teatinfo dict

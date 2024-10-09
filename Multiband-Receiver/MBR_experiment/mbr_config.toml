@@ -1,6 +1,6 @@
-IP        = "192.168.2.101"
+IP        = "192.168.2.104"
 bitfile   = "mbr_2048ch_983mhz_real.fpg"
-program   = true
+program   = false
 
 [snapshots]
 n_bits  = 16
@@ -9,11 +9,11 @@ snap_names = ["adc_snapshot0", "adc_snapshot1",
 n_samples  = 1024
 
 [spectra]
-bram_names = [["a2_0", "a2_1", "a2_2", "a2_3"],
-              ["b2_0", "b2_1", "b2_2", "b2_3"],
+bram_names = [["d2_0", "d2_1", "d2_2", "d2_3"],
               ["c2_0", "c2_1", "c2_2", "c2_3"],
-              ["d2_0", "d2_1", "d2_2", "d2_3"]]
-spec_names = ["a", "b", "c", "d"]
+              ["b2_0", "b2_1", "b2_2", "b2_3"],
+              ["a2_0", "a2_1", "a2_2", "a2_3"]]
+spec_names = ["Band 1 I", "Band 1 Q", "Band 2 I", "Band 2 Q"]
 addr_width = 9
 data_width = 64
 bandwidth  = 983.04 # MHz
@@ -28,53 +28,49 @@ const_binpt = 27
 dss_band    = "dss2" 
 
 [dss1]
-corr_brams  = [["ab_re0", "ab_re1", "ab_re2", "ab_re3"], 
-               ["ab_im0", "ab_im1", "ab_im2", "ab_im3"]]
-synth_brams = [["synth0_0", "synth0_1", "synth0_2", "synth0_3"], 
-               ["synth1_0", "synth1_1", "synth1_2", "synth1_3"]]
-const_brams = [[["bram_mult0_0_bram_re", "bram_mult0_1_bram_re",
-                 "bram_mult0_2_bram_re", "bram_mult0_3_bram_re"],
-                ["bram_mult0_0_bram_im", "bram_mult0_1_bram_im", 
-                 "bram_mult0_2_bram_im", "bram_mult0_3_bram_im"]],
-               [["bram_mult1_0_bram_re", "bram_mult1_1_bram_re", 
-                 "bram_mult1_2_bram_re", "bram_mult1_3_bram_re"],
-                ["bram_mult1_0_bram_im", "bram_mult1_1_bram_im", 
-                 "bram_mult1_2_bram_im", "bram_mult1_3_bram_im"]]]
-lo_freq      = 1 # GHz
+spec_brams  = [["d2_0", "d2_1", "d2_2", "d2_3"],
+               ["c2_0", "c2_1", "c2_2", "c2_3"]]
+corr_brams  = [["cd_re0", "cd_re1", "cd_re2", "cd_re3"], 
+               ["cd_im0", "cd_im1", "cd_im2", "cd_im3"]]
+synth_brams = [["synth2_0", "synth2_1", "synth2_2", "synth2_3"],
+               ["synth3_0", "synth3_1", "synth3_2", "synth3_3"]] 
+const_brams = [[["bram_mult2_0_bram_re", "bram_mult2_1_bram_re", "bram_mult2_2_bram_re", "bram_mult2_3_bram_re"],
+                ["bram_mult2_0_bram_im", "bram_mult2_1_bram_im", "bram_mult2_2_bram_im", "bram_mult2_3_bram_im"]],
+               [["bram_mult3_0_bram_re", "bram_mult3_1_bram_re", "bram_mult3_2_bram_re", "bram_mult3_3_bram_re"],
+                ["bram_mult3_0_bram_im", "bram_mult3_1_bram_im", "bram_mult3_2_bram_im", "bram_mult3_3_bram_im"]]]
+lo_freq      = 7.87428 # GHz
 cal_datadir  = "dss1_cal"
 srr_datadir  = "dss1_srr"
 cal_tar      = "dss1_cal.tar.gz"
 
 
 [dss2]
-corr_brams  = [["cd_re0", "cd_re1", "cd_re2", "cd_re3"], 
-               ["cd_im0", "cd_im1", "cd_im2", "cd_im3"]]
-synth_brams = [["synth2_0", "synth2_1", "synth2_2", "synth2_3"], 
-               ["synth3_0", "synth3_1", "synth3_2", "synth3_3"]]
-const_brams = [[["bram_mult2_0_bram_re", "bram_mult2_1_bram_re",
-                 "bram_mult2_2_bram_re", "bram_mult2_3_bram_re"],
-                ["bram_mult2_0_bram_im", "bram_mult2_1_bram_im", 
-                 "bram_mult2_2_bram_im", "bram_mult2_3_bram_im"]],
-               [["bram_mult3_0_bram_re", "bram_mult3_1_bram_re", 
-                 "bram_mult3_2_bram_re", "bram_mult3_3_bram_re"],
-                ["bram_mult3_0_bram_im", "bram_mult3_1_bram_im", 
-                 "bram_mult3_2_bram_im", "bram_mult3_3_bram_im"]]]
-lo_freq      = 2 # GHz
+spec_brams  = [["b2_0", "b2_1", "b2_2", "b2_3"],
+               ["a2_0", "a2_1", "a2_2", "a2_3"]]
+corr_brams  = [["ab_re0", "ab_re1", "ab_re2", "ab_re3"], 
+               ["ab_im0", "ab_im1", "ab_im2", "ab_im3"]]
+synth_brams = [["synth0_0", "synth0_1", "synth0_2", "synth0_3"],
+               ["synth1_0", "synth1_1", "synth1_2", "synth1_3"]]
+const_brams = [[["bram_mult1_0_bram_re", "bram_mult1_1_bram_re", "bram_mult1_2_bram_re", "bram_mult1_3_bram_re"],
+                ["bram_mult1_0_bram_im", "bram_mult1_1_bram_im", "bram_mult1_2_bram_im", "bram_mult1_3_bram_im"]],
+               [["bram_mult0_0_bram_re", "bram_mult0_1_bram_re", "bram_mult0_2_bram_re", "bram_mult0_3_bram_re"],
+                ["bram_mult0_0_bram_im", "bram_mult0_1_bram_im", "bram_mult0_2_bram_im", "bram_mult0_3_bram_im"]]]
+lo_freq      = 9.64020 # GHz
 cal_datadir  = "dss2_cal"
 srr_datadir  = "dss2_srr"
 cal_tar      = "dss2_cal.tar.gz"
 
 [multiband]
-invert_reg   = "invert_delay"
-invert_delay = 128
+invert_reg   = "invert_load"
+invert_delay = 104
 comb_brams   = ["comb0", "comb1", "comb2", "comb3"] 
 
 [experiment]
-rf_power     = -25 # dBm
+rf_power     = -45 # dBm
 bin_step     = 256
 pause_time   = 0.5 # should be > (1/bandwidth * FFT_size * acc_len * 2) in
                    # order for the spectra to be fully computed after a
                    # tone change
 load_consts  = true
 load_ideal   = true
-rf_generator = "TCPIP::169.254.99.253::INSTR"
+rf_generator = "TCPIP::192.168.2.101::INSTR"
