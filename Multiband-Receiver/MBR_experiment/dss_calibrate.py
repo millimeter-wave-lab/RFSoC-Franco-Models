@@ -114,7 +114,7 @@ def get_caldata(rf_freqs, tone_sideband):
     :param tone_sideband: sideband of the injected test tone. Either USB or LSB
     :return: calibration data: a2, b2, and ab.
     """
-    fig.suptitle(tone_sideband.upper() + " Tone Sweep")
+    fig.suptitle(tone_sideband.upper() + " Tone Sweep, Band: " + dss_band)
 
     a2_arr = []; b2_arr = []; ab_arr = []
     for i, test_bin in enumerate(test_bins):

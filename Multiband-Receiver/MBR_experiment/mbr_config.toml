@@ -25,11 +25,11 @@ acc_len    = 1000
 [dss]
 const_nbits = 32
 const_binpt = 27
-dss_band    = "dss2" 
+dss_band    = "dss1"
 
 [dss1]
-spec_brams  = [["d2_0", "d2_1", "d2_2", "d2_3"],
-               ["c2_0", "c2_1", "c2_2", "c2_3"]]
+spec_brams  = [["c2_0", "c2_1", "c2_2", "c2_3"],
+               ["d2_0", "d2_1", "d2_2", "d2_3"]]
 corr_brams  = [["cd_re0", "cd_re1", "cd_re2", "cd_re3"], 
                ["cd_im0", "cd_im1", "cd_im2", "cd_im3"]]
 synth_brams = [["synth2_0", "synth2_1", "synth2_2", "synth2_3"],
@@ -43,18 +43,17 @@ cal_datadir  = "dss1_cal"
 srr_datadir  = "dss1_srr"
 cal_tar      = "dss1_cal.tar.gz"
 
-
 [dss2]
-spec_brams  = [["b2_0", "b2_1", "b2_2", "b2_3"],
-               ["a2_0", "a2_1", "a2_2", "a2_3"]]
+spec_brams  = [["a2_0", "a2_1", "a2_2", "a2_3"],
+               ["b2_0", "b2_1", "b2_2", "b2_3"]]
 corr_brams  = [["ab_re0", "ab_re1", "ab_re2", "ab_re3"], 
                ["ab_im0", "ab_im1", "ab_im2", "ab_im3"]]
 synth_brams = [["synth0_0", "synth0_1", "synth0_2", "synth0_3"],
                ["synth1_0", "synth1_1", "synth1_2", "synth1_3"]]
-const_brams = [[["bram_mult1_0_bram_re", "bram_mult1_1_bram_re", "bram_mult1_2_bram_re", "bram_mult1_3_bram_re"],
-                ["bram_mult1_0_bram_im", "bram_mult1_1_bram_im", "bram_mult1_2_bram_im", "bram_mult1_3_bram_im"]],
-               [["bram_mult0_0_bram_re", "bram_mult0_1_bram_re", "bram_mult0_2_bram_re", "bram_mult0_3_bram_re"],
-                ["bram_mult0_0_bram_im", "bram_mult0_1_bram_im", "bram_mult0_2_bram_im", "bram_mult0_3_bram_im"]]]
+const_brams = [[["bram_mult0_0_bram_re", "bram_mult0_1_bram_re", "bram_mult0_2_bram_re", "bram_mult0_3_bram_re"],
+                ["bram_mult0_0_bram_im", "bram_mult0_1_bram_im", "bram_mult0_2_bram_im", "bram_mult0_3_bram_im"]],
+               [["bram_mult1_0_bram_re", "bram_mult1_1_bram_re", "bram_mult1_2_bram_re", "bram_mult1_3_bram_re"],
+                ["bram_mult1_0_bram_im", "bram_mult1_1_bram_im", "bram_mult1_2_bram_im", "bram_mult1_3_bram_im"]]]
 lo_freq      = 9.64020 # GHz
 cal_datadir  = "dss2_cal"
 srr_datadir  = "dss2_srr"
@@ -68,6 +67,7 @@ comb_brams   = ["comb0", "comb1", "comb2", "comb3"]
 [experiment]
 rf_power     = -45 # dBm
 bin_step     = 256
+#bin_step     = 16
 pause_time   = 0.5 # should be > (1/bandwidth * FFT_size * acc_len * 2) in
                    # order for the spectra to be fully computed after a
                    # tone change

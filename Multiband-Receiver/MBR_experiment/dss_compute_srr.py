@@ -112,7 +112,7 @@ def get_srrdata(rf_freqs, tone_sideband):
     :param tone_sideband: sideband of the injected test tone. Either USB or LSB
     :return: srr data: usb and lsb.
     """
-    fig.suptitle(tone_sideband.upper() + " Tone Sweep")
+    fig.suptitle(tone_sideband.upper() + " Tone Sweep, Band: " + dss_band)
 
     usb_arr = []; lsb_arr = []
     for i, test_bin in enumerate(test_bins):
@@ -179,7 +179,22 @@ def print_data():
     plt.grid()                 
     plt.xlabel("Frequency [GHz]")
     plt.ylabel("SRR [dB]")     
+    plt.ylim((0, 60))
     plt.savefig(srr_datadir+"/srr.pdf")
+
+    # compute power
+    usb_power = cd.scale_and_dBFS_specdata(usb_toneusb, acc_len, dBFS)
+    lsb_power = cd.scale_and_dBFS_specdata(lsb_tonelsb, acc_len, dBFS)
+    
+    # print power
+    plt.figure()
+    plt.plot(rf_freqs_usb, usb_power, "b")
+    plt.plot(rf_freqs_lsb, lsb_power, "r")
+    plt.grid()                 
+    plt.xlabel("Frequency [GHz]")
+    plt.ylabel("Power [dBFS]")     
+    plt.ylim((-60, 10))
+    plt.savefig(srr_datadir+"/power.pdf")
     
 if __name__ == "__main__":
     main()

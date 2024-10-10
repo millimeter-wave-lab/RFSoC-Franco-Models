@@ -21,7 +21,6 @@ const_binpt = config["dss"]["const_binpt"]
 spec_brams  = config[dss_band]["spec_brams"]
 corr_brams  = config[dss_band]["corr_brams"]
 synth_brams = config[dss_band]["synth_brams"]
-synth_brams = config[dss_band]["synth_brams"]
 const_brams = config[dss_band]["const_brams"]
 lo_freq     = config[dss_band]["lo_freq"]
 cal_datadir = config[dss_band]["cal_datadir"]
@@ -94,16 +93,16 @@ def make_data_directory(datadir):
 
 def rfsoc_initialization():
     # set accumulation and reset counters
-    print("Setting accum register to", acc_len, "...", end="")
+    print("Setting accum register to", acc_len, "...", end="", flush=True)
     rfsoc.write_int(acc_reg, acc_len)
     print("done")
-    print("Resseting counter registers...", end="")
+    print("Resseting counter registers...", end="", flush=True)
     rfsoc.write_int(reset_reg, 1)
     rfsoc.write_int(reset_reg, 0)
     print("done")
     
     # set rf power value
-    print("Setting instruments power and outputs...", end="")
+    print("Setting instruments power and outputs...", end="", flush=True)
     rf_generator.write("power " + str(rf_power))
     rf_generator.write("outp on")
     print("done")
@@ -116,12 +115,12 @@ def make_post_measurements_actions(datadir):
     - turn off sources
     - compress data
     """
-    print("Turning off instruments...", end="")
+    print("Turning off instruments...", end="", flush=True)
     rf_generator.write("outp off")
     rm.close()
     print("done")
 
-    print("Compressing data...", end="")
+    print("Compressing data...", end="", flush=True)
     compress_data(datadir)
     print("done")
 
