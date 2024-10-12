@@ -179,7 +179,7 @@ def print_data():
     plt.grid()                 
     plt.xlabel("Frequency [GHz]")
     plt.ylabel("SRR [dB]")     
-    plt.ylim((0, 60))
+    plt.ylim((0, 70))
     plt.savefig(srr_datadir+"/srr.pdf")
 
     # compute power
