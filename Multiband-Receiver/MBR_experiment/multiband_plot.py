@@ -120,7 +120,8 @@ def create_figure(bandwidth, combined_freq, dBFS):
     lines.append(line2)
 
     # ax2 combined band
-    axes[2].set_xlim(combined_freq, bandwidth)
+    #axes[2].set_xlim(combined_freq, bandwidth)
+    axes[2].set_xlim(bandwidth, combined_freq)
     axes[2].set_xlabel("Frequency [MHz]")
     axes[2].set_title("Combined")
     line, = axes[2].plot([], [], animated=True, color="green")
