@@ -38,7 +38,8 @@ const_brams = [[["bram_mult0_0_bram_re", "bram_mult0_1_bram_re", "bram_mult0_2_b
                 ["bram_mult0_0_bram_im", "bram_mult0_1_bram_im", "bram_mult0_2_bram_im", "bram_mult0_3_bram_im"]],
                [["bram_mult1_0_bram_re", "bram_mult1_1_bram_re", "bram_mult1_2_bram_re", "bram_mult1_3_bram_re"],
                 ["bram_mult1_0_bram_im", "bram_mult1_1_bram_im", "bram_mult1_2_bram_im", "bram_mult1_3_bram_im"]]]
-lo_freq      = 7.87428 # GHz
+#lo_freq      = 7.87428 # GHz
+lo_freq      = 11.08704 # GHz
 cal_datadir  = "dss1_cal"
 srr_datadir  = "dss1_srr"
 cal_tar      = "dss1_cal.tar.gz"
@@ -54,7 +55,8 @@ const_brams = [[["bram_mult2_0_bram_re", "bram_mult2_1_bram_re", "bram_mult2_2_b
                 ["bram_mult2_0_bram_im", "bram_mult2_1_bram_im", "bram_mult2_2_bram_im", "bram_mult2_3_bram_im"]],
                [["bram_mult3_0_bram_re", "bram_mult3_1_bram_re", "bram_mult3_2_bram_re", "bram_mult3_3_bram_re"],
                 ["bram_mult3_0_bram_im", "bram_mult3_1_bram_im", "bram_mult3_2_bram_im", "bram_mult3_3_bram_im"]]]
-lo_freq      = 9.64020 # GHz
+#lo_freq      = 9.64020 # GHz
+lo_freq      = 12.85296 # GHz
 cal_datadir  = "dss2_cal"
 srr_datadir  = "dss2_srr"
 cal_tar      = "dss2_cal.tar.gz"
@@ -65,7 +67,7 @@ invert_delay = 104
 comb_brams   = ["comb0", "comb1", "comb2", "comb3"] 
 
 [experiment]
-rf_power     = -45 # dBm
+rf_power     = -50 # dBm
 #bin_step     = 256
 bin_step     = 16
 pause_time   = 0.5 # should be > (1/bandwidth * FFT_size * acc_len * 2) in
