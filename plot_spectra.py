@@ -1,4 +1,3 @@
-# HOLA DAVID
 import argparse
 import tomllib
 import calandigital as cd
